@@ -5,9 +5,48 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #f0ead6; /* Papyrus-like color */
-    background-image: repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,.5) 35px, rgba(255,255,255,.5) 70px);
+    background-color: #f0ead6;
+    background-image: 
+        /* Floating hearts */
+        radial-gradient(circle at 20% 20%, #ff89a080 0, transparent 8px),
+        radial-gradient(circle at 80% 40%, #ff89a080 0, transparent 8px),
+        radial-gradient(circle at 40% 60%, #ff89a080 0, transparent 8px),
+        radial-gradient(circle at 70% 80%, #ff89a080 0, transparent 8px),
+        /* Subtle grid pattern */
+        repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,.5) 35px, rgba(255,255,255,.5) 70px),
+        /* Additional decorative elements */
+        radial-gradient(circle at 10% 90%, #ffd1dc80 0, transparent 10px),
+        radial-gradient(circle at 90% 10%, #ffd1dc80 0, transparent 10px),
+        radial-gradient(circle at 60% 30%, #ffd1dc80 0, transparent 10px);
     overflow: hidden;
+    animation: backgroundFloat 20s ease-in-out infinite;
+}
+
+@keyframes backgroundFloat {
+    0%, 100% { background-position: 0% 0%, 100% 100%, 50% 50%, 70% 80%, 0 0, 10% 90%, 90% 10%, 60% 30%; }
+    50% { background-position: 5% 5%, 95% 95%, 45% 55%, 75% 85%, 0 0, 15% 85%, 85% 15%, 55% 35%; }
+}
+
+/* Add some sparkles */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    background-image: 
+        radial-gradient(circle at 30% 30%, #ffffff90 0, transparent 3px),
+        radial-gradient(circle at 70% 60%, #ffffff90 0, transparent 3px),
+        radial-gradient(circle at 40% 80%, #ffffff90 0, transparent 3px),
+        radial-gradient(circle at 80% 20%, #ffffff90 0, transparent 3px);
+    animation: sparkle 4s ease-in-out infinite;
+}
+
+@keyframes sparkle {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
 }
 
 .paper {
