@@ -2,6 +2,7 @@
 
 body {
     height: 100vh;
+    height: 100dvh; /* For mobile browsers */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -20,6 +21,7 @@ body {
         radial-gradient(circle at 60% 30%, #ffd1dc80 0, transparent 10px);
     overflow: hidden;
     animation: backgroundFloat 20s ease-in-out infinite;
+    touch-action: none; /* Prevent default touch behaviors */
 }
 
 @keyframes backgroundFloat {
@@ -51,8 +53,8 @@ body::before {
 
 .paper {
     background-color: white;
-    width: 300px;
-    padding: 20px;
+    width: min(300px, 80vw); /* Responsive width */
+    padding: 15px;
     position: absolute;
     transform: rotate(-6deg);
     box-shadow: 3px 3px 10px rgba(0,0,0,0.3);
@@ -63,28 +65,21 @@ body::before {
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%) rotate(-6deg);
+    touch-action: none;
 }
 
 /* Stack papers with slight offset - reversed order */
-.paper:nth-child(1) { transform: translate(-50%, -50%) rotate(-6deg); z-index: 7; }
-.paper:nth-child(2) { transform: translate(-52%, -52%) rotate(-3deg); z-index: 6; }
-.paper:nth-child(3) { transform: translate(-54%, -54%) rotate(0deg); z-index: 5; }
+.paper:nth-child(7) { transform: translate(-50%, -50%) rotate(-6deg); z-index: 1; }
+.paper:nth-child(6) { transform: translate(-52%, -52%) rotate(-3deg); z-index: 2; }
+.paper:nth-child(5) { transform: translate(-54%, -54%) rotate(0deg); z-index: 3; }
 .paper:nth-child(4) { transform: translate(-56%, -56%) rotate(3deg); z-index: 4; }
-.paper:nth-child(5) { transform: translate(-58%, -58%) rotate(-2deg); z-index: 3; }
-.paper:nth-child(6) { transform: translate(-60%, -60%) rotate(4deg); z-index: 2; }
-.paper:nth-child(7) { transform: translate(-62%, -62%) rotate(-5deg); z-index: 1; }
+.paper:nth-child(3) { transform: translate(-58%, -58%) rotate(-2deg); z-index: 5; }
+.paper:nth-child(2) { transform: translate(-60%, -60%) rotate(4deg); z-index: 6; }
+.paper:nth-child(1) { transform: translate(-62%, -62%) rotate(-5deg); z-index: 7; }
 
 /* Remove the previous even child rotation */
 .paper:nth-child(even) {
     position: absolute;
-}
-
-.paper:hover {
-    z-index: 5;
-}
-
-.paper.dragging {
-    z-index: 10;
 }
 
 .paper.heart {
@@ -130,4 +125,76 @@ body::before {
 .paper.p2 {
     text-align: center;
     font-size: 18px;
+}
+
+/* Adjust positions for mobile */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+        height: 100dvh;
+        overflow: hidden;
+    }
+
+    .paper {
+        transform-origin: center center;
+        width: 95vw; /* Make papers even wider */
+        max-width: none;
+        padding: 15px;
+    }
+
+    /* Spread papers vertically but keep them more visible */
+    .paper:nth-child(7) { transform: translate(-50%, 20%) rotate(-6deg); }
+    .paper:nth-child(6) { transform: translate(-50%, 5%) rotate(-3deg); }
+    .paper:nth-child(5) { transform: translate(-50%, -10%) rotate(0deg); }
+    .paper:nth-child(4) { transform: translate(-50%, -25%) rotate(3deg); }
+    .paper:nth-child(3) { transform: translate(-50%, -40%) rotate(-2deg); }
+    .paper:nth-child(2) { transform: translate(-50%, -55%) rotate(4deg); }
+    .paper:nth-child(1) { transform: translate(-50%, -70%) rotate(-5deg); }
+
+    .paper.heart {
+        width: 150px; /* Bigger heart */
+        height: 150px;
+        transform: translate(-50%, 20%) rotate(-5deg) !important;
+    }
+
+    .paper.image {
+        padding: 12px;
+    }
+
+    .paper.image img {
+        width: 100%;
+        height: auto;
+        max-height: 50vh; /* Allow images to be taller */
+        object-fit: contain;
+    }
+
+    .heart-text {
+        font-size: 24px; /* Bigger text */
+    }
+
+    .paper p {
+        font-size: 20px; /* Bigger text */
+        margin: 10px 0;
+    }
+
+    .paper.p1, .paper.p2 {
+        font-size: 20px;
+    }
+}
+
+/* Adjustments for very small screens */
+@media (max-width: 380px) {
+    .paper {
+        width: 95vw;
+        padding: 12px;
+    }
+
+    .paper.heart {
+        width: 130px;
+        height: 130px;
+    }
+
+    .paper p {
+        font-size: 18px;
+    }
 } 

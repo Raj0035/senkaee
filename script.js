@@ -2,19 +2,21 @@ let papers = document.querySelectorAll('.paper');
 let highestZ = papers.length;
 
 papers.forEach((paper, index) => {
-    // Set initial z-index in reverse order
+    // Set initial z-index
     paper.style.zIndex = index + 1;
     
-    paper.addEventListener('mousedown', function(e) {
-        // Bring to front
+    const startDrag = (e) => {
+        e.preventDefault();
+        const event = e.touches ? e.touches[0] : e;
+        
+        // Bring paper to front when dragging
         highestZ += 1;
         paper.style.zIndex = highestZ;
         paper.classList.add('dragging');
         
-        let shiftX = e.clientX - paper.getBoundingClientRect().left;
-        let shiftY = e.clientY - paper.getBoundingClientRect().top;
+        let shiftX = event.clientX - paper.getBoundingClientRect().left;
+        let shiftY = event.clientY - paper.getBoundingClientRect().top;
 
-        // Remove the transform when dragging
         paper.style.transform = 'none';
         paper.style.position = 'absolute';
 
@@ -23,21 +25,29 @@ papers.forEach((paper, index) => {
             paper.style.top = pageY - shiftY + 'px';
         }
 
-        moveAt(e.pageX, e.pageY);
+        moveAt(event.pageX, event.pageY);
 
-        function onMouseMove(e) {
-            moveAt(e.pageX, e.pageY);
+        function onMove(e) {
+            const moveEvent = e.touches ? e.touches[0] : e;
+            moveAt(moveEvent.pageX, moveEvent.pageY);
         }
 
-        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mousemove', onMove);
+        document.addEventListener('touchmove', onMove, { passive: false });
 
-        paper.onmouseup = function() {
-            document.removeEventListener('mousemove', onMouseMove);
+        const endDrag = () => {
+            document.removeEventListener('mousemove', onMove);
+            document.removeEventListener('touchmove', onMove);
             paper.classList.remove('dragging');
-            paper.onmouseup = null;
         };
-    });
 
+        paper.onmouseup = endDrag;
+        paper.ontouchend = endDrag;
+    };
+
+    paper.addEventListener('mousedown', startDrag);
+    paper.addEventListener('touchstart', startDrag, { passive: false });
+    
     paper.ondragstart = function() {
         return false;
     };
